@@ -38,18 +38,19 @@ class AeroEnv(gym.Env):
 		# torquePenalty = math.log(abs(self.aero["M_g"][2]),5)
 		# reward = reward - torquePenalty
 		
-		# reward = reward*(self.currStep/self.episodeSteps)**2
+		reward = reward*(self.currStep/self.episodeSteps)**2
 
 		# Is torque sucking the wing forward magically? Drag? 0 reward.
 		# if(drag < 0 or self.aero["M_g"][2] > 0):
 		#	reward = -50
 		
 		# final constraints, to prevent insanely negative rewards
-		reward = max(reward, -50)
-		reward = min(reward, 150)
+		reward = max(reward, 0)
+		reward = min(reward, 300)
 
 		reward_str_1 = f"Reward: {round(reward,3)}"
-		# reward the model for improving
+		
+		# reward the model for improving by subtracting previous steps
 		reward = reward - self.prevReward
 
 		# update previous reward
